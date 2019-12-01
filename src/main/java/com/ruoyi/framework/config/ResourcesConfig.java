@@ -1,5 +1,6 @@
 package com.ruoyi.framework.config;
 
+import com.ruoyi.framework.interceptor.WeChatInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +13,7 @@ import com.ruoyi.framework.interceptor.RepeatSubmitInterceptor;
 
 /**
  * 通用配置
- * 
+ *
  * @author ruoyi
  */
 @Configuration
@@ -26,6 +27,9 @@ public class ResourcesConfig implements WebMvcConfigurer
 
     @Autowired
     private RepeatSubmitInterceptor repeatSubmitInterceptor;
+
+    @Autowired
+    private WeChatInterceptor weChatInterceptor;
 
     /**
      * 默认首页的设置，当输入域名是可以自动跳转到默认指定的网页
@@ -54,5 +58,6 @@ public class ResourcesConfig implements WebMvcConfigurer
     public void addInterceptors(InterceptorRegistry registry)
     {
         registry.addInterceptor(repeatSubmitInterceptor).addPathPatterns("/**");
+        registry.addInterceptor(weChatInterceptor).addPathPatterns("/api/**").excludePathPatterns("/api/login").excludePathPatterns("/api/checkReg");
     }
 }

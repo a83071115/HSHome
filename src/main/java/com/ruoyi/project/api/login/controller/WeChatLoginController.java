@@ -2,18 +2,16 @@ package com.ruoyi.project.api.login.controller;
 
 
 import cn.hutool.core.lang.UUID;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.web.domain.AjaxResult;
 import com.ruoyi.project.api.WeChatUtils;
 import com.ruoyi.project.api.login.domain.LoginUserInfo;
-import com.ruoyi.project.api.user.domain.UserEntity;
 import com.ruoyi.project.api.wxMember.domain.WxMember;
 import com.ruoyi.project.api.wxMember.service.IWxMemberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,6 +28,8 @@ public class WeChatLoginController {
 
     @Autowired
     private IWxMemberService wxMemberService;
+
+    public static final String TOKEN_KEY = "sk1due8dne83nd88j2kdj3";
 
     @ApiOperation("登录")
     @PostMapping("/login")
@@ -71,9 +71,41 @@ public class WeChatLoginController {
                 return AjaxResult.error("新增用户失败");
             }
         }
-        Map<String, String> result = new HashMap<>();
-        result.put("token", "token");
-        return AjaxResult.success();
+        Map<String, Object> result = new HashMap<>();
+        result.put("token", TOKEN_KEY);
+        result.put("userInfo", member);
+        return AjaxResult.success(result);
+    }
+
+    @ApiOperation("检查登录信息")
+    @PostMapping("/checkReg")
+    public AjaxResult checkReg(String code){
+
+        if (StringUtils.isEmpty(code)) {
+            return AjaxResult.error("获取code失败");
+        }
+
+        // 通过code获取用户appid 与 sessionKey
+        JSONObject sessionKeyOrOpenId = WeChatUtils.getSessionKeyOrOpenId(code);
+
+        // openid
+        String openid = sessionKeyOrOpenId.getString("openid" );
+
+        if (StringUtils.isEmpty(code)) {
+            return AjaxResult.error("获取openid失败");
+        }
+
+        // 通过openid查询用户
+        WxMember member = wxMemberService.selectWxMemberByOpenid(openid);
+
+        if (null == member || StringUtils.isEmpty(member.getOpenid())) {
+            return AjaxResult.error("该用户没有注册");
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("token", TOKEN_KEY);
+        result.put("userInfo", member);
+        return AjaxResult.success(result);
     }
 
 

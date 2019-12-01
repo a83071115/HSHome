@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.api.current.mapper.WxMemberLocationCurrentMapper">
+    
+    <resultMap type="WxMemberLocationCurrent" id="WxMemberLocationCurrentResult">
+        <result property="id"    column="id"    />
+        <result property="openid"    column="openid"    />
+        <result property="latitude"    column="latitude"    />
+        <result property="longitude"    column="longitude"    />
+        <result property="speed"    column="speed"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectWxMemberLocationCurrentVo">
+        select id, openid, latitude, longitude, speed, create_time, update_time from wx_member_location_current
+    </sql>
+
+    <select id="selectWxMemberLocationCurrentList" parameterType="WxMemberLocationCurrent" resultMap="WxMemberLocationCurrentResult">
+        <include refid="selectWxMemberLocationCurrentVo"/>
+        <where>  
+            <if test="openid != null  and openid != ''"> and openid = #{openid}</if>
+            <if test="latitude != null  and latitude != ''"> and latitude = #{latitude}</if>
+            <if test="longitude != null  and longitude != ''"> and longitude = #{longitude}</if>
+            <if test="speed != null  and speed != ''"> and speed = #{speed}</if>
+        </where>
+    </select>
+    
+    <select id="selectWxMemberLocationCurrentById" parameterType="Long" resultMap="WxMemberLocationCurrentResult">
+        <include refid="selectWxMemberLocationCurrentVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectCountByOpenid" parameterType="String" resultType="int">
+        select count(0) from wx_member_location_current
+        where openid = #{openid}
+    </select>
+        
+    <insert id="insertWxMemberLocationCurrent" parameterType="WxMemberLocationCurrent" useGeneratedKeys="true" keyProperty="id">
+        insert into wx_member_location_current
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="openid != null  and openid != ''">openid,</if>
+            <if test="latitude != null  and latitude != ''">latitude,</if>
+            <if test="longitude != null  and longitude != ''">longitude,</if>
+            <if test="speed != null  and speed != ''">speed,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="openid != null  and openid != ''">#{openid},</if>
+            <if test="latitude != null  and latitude != ''">#{latitude},</if>
+            <if test="longitude != null  and longitude != ''">#{longitude},</if>
+            <if test="speed != null  and speed != ''">#{speed},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWxMemberLocationCurrent" parameterType="WxMemberLocationCurrent">
+        update wx_member_location_current
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="latitude != null  and latitude != ''">latitude = #{latitude},</if>
+            <if test="longitude != null  and longitude != ''">longitude = #{longitude},</if>
+            <if test="speed != null  and speed != ''">speed = #{speed},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where openid = #{openid}
+    </update>
+
+    <delete id="deleteWxMemberLocationCurrentById" parameterType="Long">
+        delete from wx_member_location_current where id = #{id}
+    </delete>
+
+    <delete id="deleteWxMemberLocationCurrentByIds" parameterType="String">
+        delete from wx_member_location_current where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 获取markers -->
+    <select id="getMemberInfoToMapMarkers" parameterType="com.ruoyi.project.api.current.domain.MarkerInfo" resultType="com.ruoyi.project.api.current.domain.MarkerInfo">
+        SELECT
+          t.id,
+          t.openid,
+          t.latitude,
+          t.longitude,
+          t.speed,
+          t.update_time ,
+          a.`avatar`,
+          a.`nickname`,
+          a.`mobile`,
+          '/images/map-bigcar.png' iconPath,
+          '52.5' width,
+          '30' height
+        FROM
+          wx_member_location_current t
+          LEFT JOIN wx_member a ON a.`openid` = t.`openid`
+        <where>
+<!--            <if test="openid != null  and openid != ''"> and t.openid != #{openid}</if>-->
+<!--            <if test="latitude != null  and latitude != ''"> and latitude = #{latitude}</if>-->
+<!--            <if test="longitude != null  and longitude != ''"> and longitude = #{longitude}</if>-->
+<!--            <if test="speed != null  and speed != ''"> and speed = #{speed}</if>-->
+        </where>
+
+
+    </select>
+
+    
+</mapper>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.api.history.mapper.WxMemberLocationHistoryMapper">
+    
+    <resultMap type="WxMemberLocationHistory" id="WxMemberLocationHistoryResult">
+        <result property="id"    column="id"    />
+        <result property="openid"    column="openid"    />
+        <result property="latitude"    column="latitude"    />
+        <result property="longitude"    column="longitude"    />
+        <result property="speed"    column="speed"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectWxMemberLocationHistoryVo">
+        select id, openid, latitude, longitude, speed, create_time, update_time from wx_member_location_history
+    </sql>
+
+    <select id="selectWxMemberLocationHistoryList" parameterType="WxMemberLocationHistory" resultMap="WxMemberLocationHistoryResult">
+        <include refid="selectWxMemberLocationHistoryVo"/>
+        <where>  
+            <if test="openid != null  and openid != ''"> and openid = #{openid}</if>
+            <if test="latitude != null  and latitude != ''"> and latitude = #{latitude}</if>
+            <if test="longitude != null  and longitude != ''"> and longitude = #{longitude}</if>
+            <if test="speed != null  and speed != ''"> and speed = #{speed}</if>
+        </where>
+    </select>
+    
+    <select id="selectWxMemberLocationHistoryById" parameterType="Long" resultMap="WxMemberLocationHistoryResult">
+        <include refid="selectWxMemberLocationHistoryVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertWxMemberLocationHistory" parameterType="WxMemberLocationHistory">
+        insert into wx_member_location_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="openid != null  and openid != ''">openid,</if>
+            <if test="latitude != null  and latitude != ''">latitude,</if>
+            <if test="longitude != null  and longitude != ''">longitude,</if>
+            <if test="speed != null  and speed != ''">speed,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="openid != null  and openid != ''">#{openid},</if>
+            <if test="latitude != null  and latitude != ''">#{latitude},</if>
+            <if test="longitude != null  and longitude != ''">#{longitude},</if>
+            <if test="speed != null  and speed != ''">#{speed},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWxMemberLocationHistory" parameterType="WxMemberLocationHistory">
+        update wx_member_location_history
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="openid != null  and openid != ''">openid = #{openid},</if>
+            <if test="latitude != null  and latitude != ''">latitude = #{latitude},</if>
+            <if test="longitude != null  and longitude != ''">longitude = #{longitude},</if>
+            <if test="speed != null  and speed != ''">speed = #{speed},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteWxMemberLocationHistoryById" parameterType="Long">
+        delete from wx_member_location_history where id = #{id}
+    </delete>
+
+    <delete id="deleteWxMemberLocationHistoryByIds" parameterType="String">
+        delete from wx_member_location_history where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
