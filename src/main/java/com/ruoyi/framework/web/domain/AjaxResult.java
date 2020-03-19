@@ -27,6 +27,8 @@ public class AjaxResult extends HashMap<String, Object>
         SUCCESS(0),
         /** 警告 */
         WARN(301),
+        /** token错误 */
+        TOKEN_ERROR(401),
         /** 错误 */
         ERROR(500);
         private final int value;
@@ -175,5 +177,37 @@ public class AjaxResult extends HashMap<String, Object>
     public static AjaxResult error(String msg, Object data)
     {
         return new AjaxResult(Type.ERROR, msg, data);
+    }
+
+    /**
+     * 返回token错误消息
+     *
+     * @return
+     */
+    public static AjaxResult token_error()
+    {
+        return AjaxResult.token_error("验证信息已过期，请重新登录");
+    }
+
+    /**
+     * 返回token错误消息
+     *
+     * @param msg 返回内容
+     * @return 警告消息
+     */
+    public static AjaxResult token_error(String msg)
+    {
+        return AjaxResult.token_error(msg, null);
+    }
+    /**
+     * 返回token错误消息
+     *
+     * @param msg 返回内容
+     * @param data 数据对象
+     * @return 警告消息
+     */
+    public static AjaxResult token_error(String msg, Object data)
+    {
+        return new AjaxResult(Type.TOKEN_ERROR, msg, data);
     }
 }

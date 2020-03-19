@@ -4,13 +4,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.ruoyi</groupId>
-	<artifactId>RuoYi</artifactId>
+	<artifactId>HSHome</artifactId>
 	<version>4.1.0</version>
 	<packaging>jar</packaging>
 
-	<name>RuoYi</name>
+	<name>HSHome</name>
 	<url>http://www.ruoyi.vip</url>
-	<description>若依管理系统</description>
+	<description>货司之家后台系统</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>

@@ -1,10 +1,9 @@
 package com.ruoyi.project.api.wxMember.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import com.ruoyi.framework.aspectj.lang.annotation.Excel;
 import com.ruoyi.framework.web.domain.BaseEntity;
+
 import java.util.Date;
 
 /**
@@ -13,7 +12,8 @@ import java.util.Date;
  * @author alex
  * @date 2019-11-28
  */
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class WxMember extends BaseEntity
